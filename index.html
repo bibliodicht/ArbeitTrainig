@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>初日クエスト(見本)</title>
+<style>
+:root{
+  --bg:#f6f3ec;--surface:#fffdf8;--text:#14161c;--muted:#5a5750;
+  --line:#ddd7c8;--edge:#8a8574;
+  --accent:#c9a45c;--accent-ink:#14161c;--accent-text:#755716;
+  --serif:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Hiragino Sans","Yu Gothic",Meiryo,serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#07090f;--surface:#0c1019;--text:#ece8df;--muted:#a7a69f;
+    --line:#232a3a;--edge:#6f7686;
+    --accent:#c9a45c;--accent-ink:#0b0d12;--accent-text:#d4b06a;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#07090f;--surface:#0c1019;--text:#ece8df;--muted:#a7a69f;
+  --line:#232a3a;--edge:#6f7686;
+  --accent:#c9a45c;--accent-ink:#0b0d12;--accent-text:#d4b06a;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);
+  font-family:"Hiragino Sans","Yu Gothic",Meiryo,sans-serif;
+  font-variant-numeric:tabular-nums;line-height:1.9;font-size:1rem}
+button,input{font-family:inherit}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:8px;top:-60px;background:var(--accent);color:var(--accent-ink);padding:10px 14px;z-index:50;font-weight:700}
+.skip:focus{top:8px}
+:focus-visible{outline:2px solid var(--accent-text);outline-offset:3px}
+[tabindex="-1"]{scroll-margin-top:130px}
+[tabindex="-1"]:focus{outline:none}
+.label{font-size:.7rem;letter-spacing:.28em;color:var(--muted);font-weight:600;margin:0;text-transform:uppercase}
+.small{font-size:.875rem;color:var(--muted);margin:.4em 0}
+h1{font-family:var(--serif);font-weight:600;font-size:1.55rem;line-height:1.5;margin:.2em 0 .8em;letter-spacing:.08em}
+h2{font-family:var(--serif);font-weight:600;font-size:1.1rem;line-height:1.5;margin:0 0 .6em;letter-spacing:.06em}
+p{margin:.7em 0}
+
+/* HUD */
+.hud{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.hud-in{max-width:640px;margin:0 auto;padding:2px 16px 10px}
+.hud-top{display:flex;justify-content:space-between;align-items:center;min-height:44px}
+.menu-btn{min-height:44px;min-width:44px;padding:0 14px;background:transparent;color:var(--text);
+  border:1px solid var(--line);border-radius:0;font-size:.8rem;font-weight:500;letter-spacing:.16em;cursor:pointer;
+  display:inline-flex;align-items:center;gap:8px}
+.menu-btn svg{width:16px;height:16px}
+.hud-stats{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:end}
+.stat b{display:block;font-family:var(--serif);font-size:1.3rem;line-height:1.4;font-weight:600}
+.stat.lv b{color:var(--accent-text)}
+.xpwrap .label{display:flex;justify-content:space-between}
+.bar{height:3px;background:var(--line);margin-top:10px;overflow:hidden;margin-bottom:10px}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .6s ease}
+.menu{position:absolute;left:0;right:0;top:100%;background:var(--surface);border-bottom:1px solid var(--line)}
+.menu ul{list-style:none;margin:0 auto;padding:6px 16px 10px;max-width:640px}
+.menu button{display:block;width:100%;min-height:48px;text-align:left;background:transparent;color:var(--text);
+  border:0;border-bottom:1px solid var(--line);font-size:.95rem;letter-spacing:.08em;cursor:pointer;padding:0 4px}
+.menu li:last-child button{border-bottom:0}
+.notice{background:var(--surface);border-bottom:1px dashed var(--edge);padding:10px 16px;font-size:.9rem;text-align:center}
+
+main{max-width:640px;margin:0 auto;padding:28px 20px 72px;outline:none}
+.screen{animation:pop .4s ease-out}
+
+/* card */
+.card{position:relative;border:1px solid var(--line);background:var(--surface);padding:20px;border-radius:0;color:var(--text)}
+.card::before,.card::after{content:"";position:absolute;width:10px;height:10px;pointer-events:none}
+.card::before{top:-1px;left:-1px;border-top:1px solid var(--accent-text);border-left:1px solid var(--accent-text)}
+.card::after{right:-1px;bottom:-1px;border-bottom:1px solid var(--accent-text);border-right:1px solid var(--accent-text)}
+.card.flash{animation:edge .9s ease-out}
+.sect{margin:22px 0}
+
+/* buttons */
+.btn{min-height:50px;min-width:44px;padding:0 26px;font-size:.95rem;font-weight:600;letter-spacing:.18em;
+  border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer;border-radius:0}
+.btn.line{background:transparent;color:var(--text);border:1px solid var(--edge);font-weight:500}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+.actions .btn{flex:1 1 180px}
+.inp{display:block;width:100%;min-height:50px;margin:8px 0 0;padding:8px 14px;font-size:1rem;color:var(--text);
+  background:var(--surface);border:1px solid var(--edge);border-radius:0}
+
+/* top */
+.title{font-size:2.2rem;letter-spacing:.3em;margin:.3em 0 .3em;font-weight:600}
+.title::after{content:"";display:block;width:44px;height:1px;background:var(--accent-text);margin-top:18px}
+.sub{color:var(--muted);margin:14px 0 24px;letter-spacing:.06em}
+.mrow{display:flex;gap:14px;align-items:flex-start;margin:20px 0}
+.mascot{width:80px;flex:none}
+.mascot svg{width:100%;height:auto;display:block}
+.speech{flex:1;border:1px solid var(--line);border-left:1px solid var(--accent-text);padding:8px 16px;background:var(--surface)}
+.speech p{margin:.2em 0}
+.info{display:flex;gap:36px;margin:22px 0}
+.info b{display:block;font-family:var(--serif);font-size:1.3rem;font-weight:600}
+.note{font-size:.9rem;color:var(--muted);border-left:1px solid var(--edge);padding-left:14px;margin:20px 0}
+
+/* map */
+.map{list-style:none;margin:26px 0 0;padding:0}
+.q-li{position:relative;padding:0 0 26px 68px}
+.q-li:last-child{padding-bottom:0}
+.nodeicon{position:absolute;left:0;top:0;width:52px;height:52px;border:1px solid var(--accent-text);background:var(--surface);
+  display:flex;align-items:center;justify-content:center;color:var(--accent-text)}
+.nodeicon.lock{border-color:var(--edge);color:var(--muted)}
+.nodeicon.done{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.nodeicon svg{width:26px;height:26px}
+.q-li:not(:last-child)::after{content:"";position:absolute;left:25px;top:52px;bottom:0;width:1px;background:var(--line);transform-origin:top}
+.q-li.link-on::after{background:var(--accent-text)}
+.q-li.link-new::after{animation:grow .9s ease-out both}
+.node{display:block;width:100%;text-align:left;font-size:1rem;cursor:pointer}
+.node[aria-disabled="true"]{border-style:dashed;cursor:not-allowed}
+.node[aria-disabled="true"] .ntitle{color:var(--muted)}
+.ntitle{display:block;font-family:var(--serif);font-size:1.1rem;font-weight:600;line-height:1.6;margin-top:2px;letter-spacing:.04em}
+.nsub{display:block;color:var(--muted);font-size:.875rem}
+.nstat{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:.85rem;color:var(--muted)}
+.stars{display:inline-flex;gap:2px}
+.stars svg{width:22px;height:22px}
+.stars .on{fill:var(--accent);stroke:var(--accent-text);stroke-width:1.2}
+.stars .off{fill:none;stroke:var(--edge);stroke-width:1.2}
+
+/* quest */
+.segs{display:flex;gap:4px;margin:8px 0 22px}
+.segs span{flex:1;height:2px;background:var(--line)}
+.segs .d{background:var(--accent-text)}
+.segs .c{background:var(--text)}
+.qtext{font-size:1.05rem;font-weight:500;margin:0;line-height:1.9}
+.terms{margin:12px 0 0;font-size:.875rem;color:var(--muted)}
+.terms b{color:var(--text)}
+.rulebox{margin-top:16px;border:1px dashed var(--edge);padding:12px 16px}
+.rulebox ul{margin:.3em 0;padding-left:1.2em}
+.hint{font-size:.875rem;color:var(--muted);margin:18px 0 4px}
+.opts{margin:0}
+.opts.tf{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{display:flex;gap:14px;align-items:flex-start;min-height:50px;padding:13px 16px;margin:10px 0;
+  border:1px solid var(--edge);background:var(--surface);cursor:pointer;border-radius:0}
+.opts.tf .opt{margin:6px 0}
+.opt input{flex:none;width:20px;height:20px;margin:4px 0 0;accent-color:var(--accent-text)}
+.opt:focus-within{outline:2px solid var(--accent-text);outline-offset:3px}
+.opt.sel,.opt.ok{border-color:var(--accent-text);box-shadow:inset 0 0 0 1px var(--accent-text)}
+.opt.ng{border-style:dashed;border-color:var(--text)}
+.opt .body{display:block}
+.mk{display:block;font-weight:600;color:var(--accent-text);font-size:.875rem;letter-spacing:.06em}
+.opt.ng .mk{color:var(--text)}
+.steps{list-style:none;margin:10px 0;padding:0}
+.steps li{margin:10px 0}
+.step{display:flex;gap:14px;align-items:center;width:100%;min-height:50px;padding:11px 16px;text-align:left;font-size:1rem;
+  color:var(--text);background:var(--surface);border:1px solid var(--edge);cursor:pointer;border-radius:0}
+.step.on{border-color:var(--accent-text);box-shadow:inset 0 0 0 1px var(--accent-text)}
+.step[disabled]{cursor:default;color:var(--text);-webkit-text-fill-color:var(--text)}
+.num{flex:none;width:28px;height:28px;border:1px solid var(--edge);display:inline-flex;align-items:center;justify-content:center;font-weight:600;font-size:.9rem}
+.step.on .num{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.fb{margin-top:26px;border:1px solid var(--accent-text);padding:18px 20px;background:var(--surface)}
+.fb.bad{border-style:dashed;border-color:var(--text)}
+.fb-title{font-family:var(--serif);font-size:1.15rem;font-weight:600;margin:0;letter-spacing:.06em}
+.fb-xp{margin:.3em 0;font-weight:600;color:var(--accent-text)}
+.combo{display:inline-block;border:1px solid var(--accent-text);color:var(--accent-text);padding:0 12px;margin-left:10px;
+  letter-spacing:.14em;font-size:.85rem;animation:pop .4s ease-out}
+.fb-exp{margin:.7em 0}
+.answerlist{margin:.4em 0 .6em;padding-left:1.4em}
+
+/* result / cert */
+.big{font-family:var(--serif);font-size:2.3rem;font-weight:600;color:var(--accent-text);line-height:1.4;margin:.2em 0}
+.rlist{list-style:none;margin:10px 0;padding:0}
+.rlist li{display:flex;align-items:center;gap:14px;margin:10px 0}
+.rlist svg{width:40px;height:40px;flex:none}
+.cert-card{padding:36px 22px;text-align:center;border-color:var(--accent-text);outline:1px solid var(--line);outline-offset:-9px}
+.cert-co{letter-spacing:.2em;color:var(--muted);margin:0}
+.cert-name{font-family:var(--serif);font-size:1.8rem;font-weight:600;margin:.4em 0;letter-spacing:.1em}
+.cert-meta{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;margin:22px 0;text-align:left}
+.cert-meta dt{font-size:.7rem;letter-spacing:.26em;color:var(--muted);font-weight:600}
+.cert-meta dd{margin:0;font-family:var(--serif);font-size:1.1rem;font-weight:600}
+.cert-badges{list-style:none;margin:10px 0;padding:0;display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center}
+.cert-badges li{display:flex;align-items:center;gap:6px;font-size:.9rem}
+.cert-badges svg{width:28px;height:28px}
+
+/* badges / glossary / company */
+.bgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin:0;padding:0;list-style:none}
+.bitem{display:flex;gap:16px;align-items:center}
+.bitem svg{width:54px;height:54px;flex:none}
+.bitem b{display:block;font-family:var(--serif)}
+.bitem .st{font-size:.7rem;letter-spacing:.22em;font-weight:600;color:var(--accent-text);display:block}
+.bitem.no .st{color:var(--muted)}
+dl.gl{margin:0}
+dl.gl .card{margin:16px 0}
+dl.gl dt{font-family:var(--serif);font-weight:600;font-size:1.05rem}
+dl.gl dd{margin:.2em 0 0}
+.citem{display:flex;gap:16px;margin:16px 0}
+.cno{font-family:var(--serif);font-size:1.4rem;font-weight:600;color:var(--accent-text);min-width:2.2em}
+.msg{min-height:1.5em;font-weight:600;margin:10px 0 0}
+.warn{border-style:dashed;border-color:var(--text)}
+
+@keyframes pop{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@keyframes edge{0%{border-color:var(--accent-text);box-shadow:0 0 0 1px var(--accent-text)}100%{border-color:var(--line);box-shadow:0 0 0 0 transparent}}
+@keyframes grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+@media (max-width:380px){
+  .opts.tf{grid-template-columns:1fr}
+  .mascot{width:64px}
+  .title{font-size:1.7rem;letter-spacing:.22em}
+  main{padding:22px 16px 64px}
+}
+@media print{
+  @page{margin:16mm}
+  body{--bg:#fff;--surface:#fff;--text:#000;--muted:#333;--line:#999;--edge:#444;--accent:#ddd;--accent-text:#000;--accent-ink:#000;
+    background:#fff;color:#000}
+  .hud,.menu,.notice,.no-print,.skip{display:none!important}
+  main{max-width:none;padding:0}
+  .card{break-inside:avoid;border-color:#000}
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">本文へ移動</a>
+<div id="notice" class="notice" role="status" hidden></div>
+<header class="hud" id="hud">
+  <div class="hud-in">
+    <div class="hud-top">
+      <span class="label">First Day Quest</span>
+      <button type="button" class="menu-btn" id="menubtn" data-act="toggle-menu" aria-expanded="false" aria-controls="menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        メニュー
+      </button>
+    </div>
+    <div class="hud-stats">
+      <div class="stat lv"><span class="label">Level</span><b id="hud-lv">01</b></div>
+      <div class="xpwrap">
+        <div class="label"><span>XP</span><span id="hud-xp">0 / 40</span></div>
+        <div class="bar" id="hud-bar" role="progressbar" aria-label="次のレベルまでのXP" aria-valuemin="0" aria-valuemax="40" aria-valuenow="0"><i id="hud-fill"></i></div>
+      </div>
+      <div class="stat"><span class="label">Rank</span><b id="hud-rank">見習い</b></div>
+    </div>
+  </div>
+  <nav class="menu" id="menu" aria-label="メニュー" hidden>
+    <ul>
+      <li><button type="button" data-act="go" data-to="top">トップ画面</button></li>
+      <li><button type="button" data-act="go" data-to="map">クエストマップ</button></li>
+      <li><button type="button" data-act="go" data-to="badges">バッジ一覧</button></li>
+      <li><button type="button" data-act="go" data-to="glossary">用語の説明</button></li>
+      <li><button type="button" data-act="go" data-to="settings">設定</button></li>
+      <li id="menu-cert" hidden><button type="button" data-act="go" data-to="cert">修了証</button></li>
+    </ul>
+  </nav>
+</header>
+<main id="main" tabindex="-1"></main>
+<noscript><p style="padding:16px">この教材を使うには、JavaScriptをオンにしてください。</p></noscript>
+
+<script>
+"use strict";
+/* ==========================================================================
+   CONFIG(データ)── 会社ごとに差しかえる場所
+   --------------------------------------------------------------------------
+   【会社ごとに差しかえる手順】
+   1. companyName を、その会社の名前に変える。
+   2. rules(連絡手段・連絡する時刻・相談先)を、その会社の実際の決まりに書きかえる。
+      見本では末尾に「(例)」がついている。実際の決まりにしたら「(例)」を消し、
+      disclaimer(「これは例です」の文)も、会社と相談して消すか書きかえる。
+   3. quests と boss の questions を、その会社の場面・言葉に合わせて書きかえる。
+      - type は "choice"(3つの選択肢)/ "truefalse"(○×)/ "order"(並べ替え)。
+      - choice    : options は文字列の配列、answer は正解の番号(0はじまり)。
+      - truefalse : answer は true または false。options は不要。
+      - order     : options は画面に出る順(正解の順でなくてよい)。
+                    answer は「正解の順に並べた options の番号」の配列。
+      - ruleKeys  : ["lateContact"] のように書くと、その会社のルールを問題の下に表示する。
+      - 文章の中に {rules.lateContact} と書くと、rules の内容が入る。
+      - terms     : ["勤怠"] のように書くと、glossary の説明が問題に付く。
+      - note      : 問題に付ける補足の説明(任意)。
+   4. glossary(用語)と、badges の name / condition を書きかえる。
+   5. quests の id(q1〜q5)と、badges の id は、プログラムと結びついているので変えない。
+   6. companyPage(「貴社版では、ここが変わります」ページ)を、納品用の説明に書きかえる。
+      納品版では、この「見本」の文言を、その会社向けの文言に変える。
+   7. ゲームの数値(xp / levels / starRule)は、このCONFIGの中で調整できる。
+   見た目や動きは、このあとの <script> と、上の <style> にある。通常は触らない。
+   ========================================================================== */
+const CONFIG = {
+  appTitle: "初日クエスト",
+  appLabel: "First Day Quest",
+  appSubtitle: "新人・アルバイト向け 研修教材(見本)",
+  companyName: "サンプル商事(架空)",
+  mascot: {
+    name: "先輩",
+    lines: {
+      welcome: "ようこそ。いっしょに、初日の練習をしましょう。分からないことがあっても、大丈夫です。",
+      correct: "いいですね。そのとおりです。",
+      retry: "おしい。説明を読んで、もう一度やってみましょう。",
+      combo: "続けて正解です。すばらしい。",
+      clear: "クエストクリアです。おつかれさま。",
+      done: "全部クリアです。おめでとう。あなたなら、きっと大丈夫です。"
+    }
+  },
+  disclaimer: "これは例です。実際のルールは、会社の指示に従ってください。",
+  rules: { // 会社ごとに変わる項目。見本では、すべて「(例)」
+    lateContact: "遅れそうだと分かったら、すぐに、電話で責任者に連絡する。電話がつながらないときは、会社のチャットにも書く(例)",
+    absenceContact: "休むときは、始業の前に、電話で責任者に連絡する。時刻や方法は、会社の指示に従う(例)",
+    consultation: "まず、近くの先輩か責任者に話す。話しにくいときは、総務の相談窓口に連絡する(例)"
+  },
+  ruleLabels: { lateContact: "遅刻の連絡", absenceContact: "休むときの連絡", consultation: "相談先" },
+  ranks: ["見習い", "新人", "一人前", "頼れる仲間"],
+  xp: { correct: 10, comboStep: 2, comboMax: 10, retryRate: 0.5, questClear: 10, bossClear: 30 },
+  levels: { base: 40, step: 20, rankAt: [1, 2, 3, 4] }, // 次のレベルに必要なXP = base + step × (現在のレベル − 1)
+  starRule: { three: 0, two: 2 },                       // まちがえた回数が three 以下なら星3、two 以下なら星2、それより多いと星1
+  quests: [
+    { id: "q1", title: "あいさつと身だしなみ", subtitle: "出勤したときの第一声と、気持ちのよい印象",
+      questions: [
+        { type: "choice", text: "出勤して、職場に入るところです。先輩や同僚が近くにいます。最初に、どうしますか?",
+          options: ["明るい声で「おはようございます」と言い、軽く頭を下げる", "だまって自分の席へ行き、仕事の準備を始める", "目が合ったときだけ、小さい声であいさつする"],
+          answer: 0, explanation: "あいさつは、仕事の第一歩です。自分から、相手に聞こえる声で言うと、みんなが安心します。" },
+        { type: "truefalse", text: "始業の前に、鏡で髪や服を確認するのは、よい習慣である。",
+          answer: true, explanation: "そのとおりです。清潔で、仕事がしやすい服装は、お客様にも同僚にも安心感を与えます。制服や服装の決まりは、会社で確認しましょう。" },
+        { type: "choice", text: "仕事中に、お客様が近くに来ました。あなたは、まだ仕事を教わっている途中です。どうしますか?",
+          options: ["目を見て「いらっしゃいませ」と言い、分からない質問は先輩に確認する", "忙しそうなふりをして、声をかけない", "分からなくても、思いついた答えをその場で言う"],
+          answer: 0, explanation: "まず声をかけて、気づいていることを伝えます。分からないことは、先輩に確認すれば大丈夫です。" },
+        { type: "order", text: "朝、仕事を始める前の流れを、順番に並べましょう。",
+          options: ["今日の予定や連絡を確認する", "服や髪を整える", "仕事の準備をして、始める", "職場に着いて、あいさつをする"],
+          answer: [1, 3, 0, 2], explanation: "整えて、あいさつして、確認してから始めると、落ち着いて動けます。順番は、会社によって少し変わることもあります。" }
+      ] },
+    { id: "q2", title: "報告・連絡・相談", subtitle: "いつ・誰に・どう伝えるか",
+      questions: [
+        { type: "choice", text: "作業中に、自分のミスに気づきました。まだ、誰も気づいていません。どうしますか?",
+          options: ["すぐに、先輩に伝える", "自分で直せそうなので、直してから黙っている", "あとで、誰かに聞かれたら話す"],
+          answer: 0, terms: ["報告・連絡・相談"], explanation: "ミスは、早く伝えるほど、直しやすくなります。伝えることは悪いことではなく、チームを助ける行動です。" },
+        { type: "order", text: "先輩に報告するときの話し方を、順番に並べましょう。",
+          options: ["推測:「たぶん〜だと思います」と、分けて話す", "結論:何が起きたかを、先に言う", "相談:どうすればよいかを、聞く", "事実:自分が見たこと、分かっていること"],
+          answer: [1, 3, 0, 2], terms: ["結論", "事実と推測"], explanation: "結論から話すと、相手がすぐ状況をつかめます。事実と推測を分けると、判断をまちがえにくくなります。" },
+        { type: "truefalse", text: "分からないことがあるとき、「たぶんこうだろう」と思って進めるのが、いちばん早くて正しい方法である。",
+          answer: false, explanation: "思いこみで進めると、あとで大きなやり直しになることがあります。聞くことは、迷惑ではありません。" },
+        { type: "choice", text: "先輩に質問したいです。でも、先輩は電話中で、忙しそうです。どうしますか?",
+          options: ["電話が終わるのを待って、「いま少しよろしいですか」と声をかける", "電話中でも、すぐに大きな声で質問する", "質問をやめて、自分で考え続ける"],
+          answer: 0, explanation: "相手の様子を見て、声をかけるタイミングを選びます。急ぎのときは、メモで知らせる方法もあります。" }
+      ] },
+    { id: "q3", title: "遅刻・欠勤の連絡", subtitle: "連絡する順番と、伝えること",
+      questions: [
+        { type: "choice", text: "電車が止まって、始業に間に合いそうにありません。最初に、何をしますか?", ruleKeys: ["lateContact"],
+          options: ["遅れると分かった時点で、会社の方法で、すぐ連絡する", "着いてからあやまればよいので、急いで職場に向かう", "友だちに、代わりに連絡をお願いする"],
+          answer: 0, terms: ["遅刻"], explanation: "遅れると分かったら、すぐに連絡します。会社の人が、仕事の段取りを変えられるからです。このサンプルでは、{rules.lateContact}" },
+        { type: "order", text: "遅刻の連絡で伝えることを、話す順番に並べましょう。", ruleKeys: ["lateContact"],
+          options: ["着く予定の時刻を言う", "名前を言う", "理由を、短く言う", "遅れることを、先に言う"],
+          answer: [1, 3, 2, 0], explanation: "名前のあと、結論(遅れること)を先に言います。理由は短く、着く予定の時刻まで伝えると、相手が動きやすくなります。" },
+        { type: "truefalse", text: "休むことが決まったら、できるだけ早く、会社のルールの方法で連絡する。", ruleKeys: ["absenceContact"],
+          answer: true, explanation: "早く連絡すると、ほかの人が準備できます。連絡の方法や時刻は会社で違うので、必ず確認しましょう。" },
+        { type: "choice", text: "朝、熱があって、起きられません。連絡するときの、いちばんよい話し方は?", ruleKeys: ["absenceContact"],
+          options: ["休みたいことと、体調の様子を伝え、引き継ぎが必要か聞く", "「休みます」とだけ言って、電話を切る", "元気になってから、まとめて連絡する"],
+          answer: 0, terms: ["欠勤"], explanation: "休む理由と、仕事への影響を伝えると、相手が動きやすくなります。無理せず、まず体を休めましょう。" }
+      ] },
+    { id: "q4", title: "休憩と勤怠", subtitle: "休憩の取り方と、出勤・退勤の記録",
+      questions: [
+        { type: "truefalse", text: "休憩の時間や取り方は、会社や仕事によって違う。分からないときは、先に会社のルールを確認する。",
+          answer: true, note: "休憩の時間や回数は、会社のルールで決まっています。この教材には、数字は書いていません。",
+          explanation: "休憩の決まりは、仕事の種類やシフトで変わることがあります。数字を覚えるより、聞いて確認する習慣が大切です。" },
+        { type: "choice", text: "出勤したときと、退勤したときの記録について、正しい考え方はどれですか?",
+          options: ["会社の方法で、そのたびに、忘れずに記録する", "あとで思い出して、まとめて書けばよい", "自分の記録は、先輩に任せる"],
+          answer: 0, terms: ["勤怠"], explanation: "勤怠の記録は、働いた時間を正しく残すための大切なものです。方法は会社で違うので、初日に教えてもらいましょう。" },
+        { type: "choice", text: "来週、どうしても休みたい用事ができました。どうしますか?",
+          options: ["会社の決まった方法で、早めに希望を出し、相談する", "その日になってから、休みますと伝える", "ほかのアルバイトに、勝手に交代をお願いして決める"],
+          answer: 0, terms: ["シフト"], note: "シフトの変更や休みの希望の出し方は、会社のルールを確認しましょう。",
+          explanation: "休みや交代の希望は、早めに、決まった方法で伝えると、調整しやすくなります。交代のルールは会社で違います。" }
+      ] },
+    { id: "q5", title: "困ったとき", subtitle: "体調・けが・いやな思いをしたときの相談",
+      questions: [
+        { type: "choice", text: "仕事中に、気分が悪くなりました。休憩の時間では、ありません。どうしますか?", ruleKeys: ["consultation"],
+          options: ["がまんせず、近くの先輩か責任者に、すぐ伝える", "迷惑になるので、最後までがまんする", "だまって、職場から出ていく"],
+          answer: 0, terms: ["責任者"], explanation: "体調が悪いときは、無理をしないことが大切です。早く伝えると、安全に休む方法を、いっしょに考えられます。" },
+        { type: "order", text: "仕事中に、けがをしました。対応を、順番に並べましょう。",
+          options: ["あとで、何があったかを、事実で説明する", "近くの人に、すぐ知らせる", "安全な場所で、いったん動きを止める", "手当てが必要かは、責任者の指示を聞いて決める"],
+          answer: [2, 1, 3, 0], explanation: "まず自分の安全を守り、すぐ知らせます。強い痛みがあるときは、周りの人に、大きな声で助けを求めましょう。" },
+        { type: "choice", text: "先輩に、いやな言い方をされて、つらい気持ちです。どうしますか?", ruleKeys: ["consultation"],
+          options: ["一人でがまんせず、会社の相談先に、早めに相談する", "自分が悪いのかもしれないので、誰にも言わない", "SNSに書いて、みんなに知ってもらう"],
+          answer: 0, terms: ["ハラスメント", "相談窓口"], explanation: "いやな思いをしたとき、あなたが悪いわけではありません。ハラスメントかどうか迷っていても、相談してよいのです。" },
+        { type: "truefalse", text: "相談するときは、いつ、どこで、何があったかをメモしておくと、伝えやすい。", ruleKeys: ["consultation"],
+          answer: true, explanation: "メモがあると、思い出しながら話せて、相手も状況を分かりやすくなります。言いにくいことは、無理に全部話さなくても大丈夫です。" }
+      ] }
+  ],
+  boss: { title: "初日の一日", subtitle: "朝のあいさつから、退勤まで",
+    questions: [
+      { type: "choice", text: "【朝】家を出る前に、体調が悪くて、少し遅れそうです。どうしますか?", ruleKeys: ["lateContact"],
+        options: ["分かった時点で、会社の方法で連絡し、遅れる理由と着く予定を伝える", "着いてから話せばよいので、急いで向かう", "連絡せず、着く時刻もまだ決めない"],
+        answer: 0, explanation: "早く連絡すると、職場が準備できます。理由と、着く予定の時刻まで伝えましょう。" },
+      { type: "truefalse", text: "【出勤】朝のあいさつは、先輩が先に声をかけてくれるまで、待つほうがよい。",
+        answer: false, explanation: "自分から、先に言って大丈夫です。あいさつは、早いほうが相手も安心します。" },
+      { type: "order", text: "【午前】作業中に、数をまちがえたことに気づきました。報告の順番を並べましょう。",
+        options: ["事実:どこで、いくつ違うかを話す(推測は分ける)", "近くの先輩に、手が空いているか聞いて、声をかける", "どうすればよいか、指示をもらう", "結論:数をまちがえたことを、先に伝える"],
+        answer: [1, 3, 0, 2], terms: ["結論"], explanation: "声をかけて、結論から話し、事実を伝え、最後に指示をもらいます。この順番だと、相手がすぐ動けます。" },
+      { type: "choice", text: "【午後】作業中に、頭が痛くなってきました。休憩の時間は、まだ先です。", ruleKeys: ["consultation"],
+        options: ["近くの先輩か責任者に、早めに伝え、指示を聞く", "休憩の時間まで、何も言わずにがまんする", "誰にも言わず、そっと帰る"],
+        answer: 0, explanation: "がまんせず、早めに伝えます。休憩のルールは会社で違うので、指示に従えば大丈夫です。" },
+      { type: "order", text: "【退勤】一日の終わりの流れを、順番に並べましょう。",
+        options: ["「お先に失礼します」と、あいさつして帰る", "出勤・退勤の記録を、会社の方法でつける", "今日の仕事を、先輩に報告する", "引き継ぐことや、明日の予定を確認する"],
+        answer: [2, 3, 1, 0], terms: ["引き継ぎ"], explanation: "報告と確認をして、記録をつけ、あいさつして帰ります。順番は、会社によって少し違うことがあります。" }
+    ] },
+  badges: [ // id はプログラムと結びついているので、変えない。name と condition は変えてよい
+    { id: "first", name: "初出勤", condition: "QUEST 01 をクリアする" },
+    { id: "contact", name: "連絡の達人", condition: "QUEST 02 と QUEST 03 をクリアする" },
+    { id: "streak3", name: "3連続正解", condition: "1回で、3問続けて正解する" },
+    { id: "nomiss", name: "ノーミスクリア", condition: "まちがえずに、1つのクエストをクリアする" },
+    { id: "allstars", name: "すべての星を集めた", condition: "5つのクエストで、すべて星3つにする" },
+    { id: "complete", name: "初日クエスト修了", condition: "ボスクエストをクリアする" }
+  ],
+  glossary: [
+    { term: "報告・連絡・相談", meaning: "仕事で大切な、3つの伝え方です。報告は「結果を伝える」、連絡は「事実を知らせる」、相談は「迷いを聞く」ことです。" },
+    { term: "結論", meaning: "いちばん伝えたいことです。「何が起きたか」を、先に言います。" },
+    { term: "事実と推測", meaning: "事実は、自分が見たり聞いたりして、たしかなことです。推測は、「たぶん〜」という自分の考えです。" },
+    { term: "勤怠", meaning: "出勤、退勤、遅刻、欠勤、休みなど、働いた記録のことです。記録の方法は、会社によって違います。" },
+    { term: "シフト", meaning: "働く日と時間の予定表です。変えたいときは、決まった方法で、早めに伝えます。" },
+    { term: "遅刻", meaning: "決まった時間に間に合わず、始めるのが遅れることです。遅れると分かったら、すぐに連絡します。" },
+    { term: "欠勤", meaning: "決まっていた仕事の日に、休むことです。休むと決まったら、できるだけ早く連絡します。" },
+    { term: "責任者", meaning: "その場の仕事をまとめる人です。店長、リーダー、主任など、呼び方は会社によって違います。" },
+    { term: "引き継ぎ", meaning: "自分の仕事の状況を、次に担当する人に伝えることです。" },
+    { term: "ハラスメント", meaning: "相手がいやな思いをする、言葉や行動のことです。迷ったときも、相談して大丈夫です。" },
+    { term: "相談窓口", meaning: "困りごとを聞いてくれる、会社の決まった場所や人です。" },
+    { term: "ヒヤリハット", meaning: "事故にはならなかったけれど、ひやっとした出来事です。早く共有すると、次の事故を防げます。" }
+  ],
+  companyPage: {
+    title: "貴社版では、ここが変わります",
+    lead: "この教材は見本です。ご依頼のあと、内容を相談して、貴社専用の教材に差しかえます。",
+    items: [
+      { title: "貴社の実際のルール", body: "連絡手段、連絡する時刻、相談先、休憩の取り方などを、貴社の決まりに合わせて書きかえます。見本の「(例)」の部分が、すべて貴社の内容になります。" },
+      { title: "貴社で使われている言葉", body: "社内でよく使う言葉や、略語、部署の呼び方を、やさしい日本語の説明つきで「用語の説明」に入れます。" },
+      { title: "貴社の制服・設備・現場の図や写真", body: "制服の着方、更衣室や休憩室の場所、機械や道具の使い方などを、貴社の資料をもとに、図や写真で説明します。" },
+      { title: "よくある失敗やヒヤリとした事例", body: "貴社で実際にあった失敗や、ヒヤリとした出来事を、個人が分からない形で、シナリオ問題にします。" },
+      { title: "受講後の確認(確認テスト)", body: "学んだことが身についたかを、短いテストで確認します。合格の目安は、貴社と相談して決めます。" }
+    ]
+  }
+};
+
+/* ============================ ここから下は、プログラム ============================ */
+const APPID = "first-day-quest";
+const KEY = "firstDayQuest.v1";
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fmt = s => String(s).replace(/\{rules\.(\w+)\}/g, (m, k) => Object.prototype.hasOwnProperty.call(CONFIG.rules, k) ? CONFIG.rules[k] : "");
+const t = s => esc(fmt(s));
+const pad = n => String(n).padStart(2, "0");
+
+const DEFAULT = () => ({ v: 1, name: "", nameAsked: false, theme: "auto", xp: 0, progress: {}, badges: [], bestStreak: 0, anyPerfect: false, completedAt: "" });
+let state = DEFAULT();
+let view = { name: "top" };
+let S = null;            // いま遊んでいるクエスト
+let R = null;            // 直前のクリア結果
+let lastUnlocked = null; // 直前に開いたクエスト(線のアニメーション用)
+
+/* ---- 保存 ---- */
+const Store = {
+  ok: true,
+  init() { try { localStorage.setItem("__t", "1"); localStorage.removeItem("__t"); this.ok = true; } catch (e) { this.ok = false; } },
+  load() { if (!this.ok) return null; try { const r = localStorage.getItem(KEY); return r ? JSON.parse(r) : null; } catch (e) { return null; } },
+  save() { if (!this.ok) return false; try { localStorage.setItem(KEY, JSON.stringify(state)); return true; } catch (e) { this.ok = false; showStorageNotice(); return false; } },
+  clear() { try { localStorage.removeItem(KEY); } catch (e) { /* 何もしない */ } }
+};
+function showStorageNotice() {
+  const n = $("notice");
+  n.textContent = "このブラウザでは記録を保存できません。画面を閉じると消えます。";
+  n.hidden = false;
+}
+function allIds() { return CONFIG.quests.map(q => q.id).concat("boss"); }
+function getQuest(id) { return id === "boss" ? Object.assign({ id: "boss" }, CONFIG.boss) : CONFIG.quests.find(q => q.id === id); }
+function sanitize(raw) {
+  if (!raw || typeof raw !== "object") return null;
+  const s = DEFAULT();
+  s.name = typeof raw.name === "string" ? raw.name.slice(0, 20) : "";
+  s.nameAsked = !!raw.nameAsked || s.name !== "";
+  s.theme = ["auto", "light", "dark"].indexOf(raw.theme) >= 0 ? raw.theme : "auto";
+  s.xp = Number.isFinite(raw.xp) ? Math.max(0, Math.min(100000, Math.floor(raw.xp))) : 0;
+  if (raw.progress && typeof raw.progress === "object") {
+    allIds().forEach(id => {
+      const p = raw.progress[id];
+      if (p && typeof p === "object" && p.cleared) {
+        s.progress[id] = { cleared: true, stars: Math.min(3, Math.max(1, Math.floor(Number(p.stars)) || 1)), perfect: !!p.perfect };
+      }
+    });
+  }
+  const bids = CONFIG.badges.map(b => b.id);
+  if (Array.isArray(raw.badges)) raw.badges.forEach(b => { if (bids.indexOf(b) >= 0 && s.badges.indexOf(b) < 0) s.badges.push(b); });
+  s.bestStreak = Number.isFinite(raw.bestStreak) ? Math.max(0, Math.min(999, Math.floor(raw.bestStreak))) : 0;
+  s.anyPerfect = !!raw.anyPerfect;
+  s.completedAt = typeof raw.completedAt === "string" && !isNaN(Date.parse(raw.completedAt)) ? raw.completedAt : "";
+  return s;
+}
+
+/* ---- レベル・ランク ---- */
+function levelInfo(xp) {
+  let lv = 1, rest = xp, need = CONFIG.levels.base;
+  while (rest >= need) { rest -= need; lv++; need = CONFIG.levels.base + CONFIG.levels.step * (lv - 1); }
+  return { level: lv, into: rest, need: need };
+}
+function rankOf(level) {
+  let idx = 0;
+  CONFIG.levels.rankAt.forEach((l, i) => { if (level >= l) idx = i; });
+  return CONFIG.ranks[Math.min(idx, CONFIG.ranks.length - 1)];
+}
+function isUnlocked(id) {
+  const ids = allIds(), i = ids.indexOf(id);
+  if (i < 0) return false;
+  return ids.slice(0, i).every(x => state.progress[x] && state.progress[x].cleared);
+}
+function cleared(id) { return !!(state.progress[id] && state.progress[id].cleared); }
+function callName() { return state.name ? state.name + "さん" : "あなた"; }
+function fmtDate(iso) { const d = new Date(iso); return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+function line(kind) { const l = CONFIG.mascot.lines[kind]; return Array.isArray(l) ? l[(S ? S.idx : 0) % l.length] : (l || ""); }
+
+/* ---- 見た目の部品(SVG) ---- */
+function icon(key) {
+  const p = {
+    q1: '<path d="M4 5h16v10H10l-4 4v-4H4z"/>',
+    q2: '<path d="M5 5v14M5 12h14M14 7l5 5-5 5"/>',
+    q3: '<circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/>',
+    q4: '<rect x="4" y="6" width="16" height="14"/><path d="M4 10h16M8 4v4M16 4v4"/>',
+    q5: '<path d="M12 3l8 3v6c0 4.5-3.2 7.5-8 9-4.8-1.5-8-4.5-8-9V6z"/>',
+    boss: '<path d="M12 3l9 9-9 9-9-9z"/><path d="M12 8l4 4-4 4-4-4z"/>',
+    lock: '<rect x="6" y="11" width="12" height="9"/><path d="M8 11V8a4 4 0 018 0v3"/>'
+  }[key] || '';
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" aria-hidden="true" focusable="false">' + p + '</svg>';
+}
+function starsHtml(n) {
+  let h = '<span class="stars" role="img" aria-label="星 ' + n + ' / 3">';
+  for (let i = 1; i <= 3; i++) h += '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polygon class="' + (i <= n ? 'on' : 'off') + '" points="12,2 15,9 22,9.5 16.5,14.5 18.5,22 12,18 5.5,22 7.5,14.5 2,9.5 9,9"/></svg>';
+  return h + '</span>';
+}
+function badgeSvg(id, earned) {
+  const inner = {
+    first: 'M8.5 12.5l2.5 2.5 4.5-5',
+    contact: 'M7.5 12h9M13 8.5l3.5 3.5-3.5 3.5',
+    streak3: 'M8 16v-3M12 16v-6M16 16v-9',
+    nomiss: 'M12 7.5a4.5 4.5 0 100 9 4.5 4.5 0 000-9z',
+    allstars: 'M12 7l1.5 3.2 3.5.4-2.6 2.4.7 3.4-3.1-1.7-3.1 1.7.7-3.4L7 10.6l3.5-.4z',
+    complete: 'M9 7v10M9 8h6l-1.5 2L15 12H9'
+  }[id] || 'M8 12h8';
+  const fill = earned ? 'var(--accent)' : 'none';
+  const stroke = earned ? 'var(--accent-text)' : 'var(--edge)';
+  const dash = earned ? '' : ' stroke-dasharray="3 2"';
+  const ink = earned ? 'var(--accent-ink)' : 'var(--muted)';
+  return '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2l8.5 5v10L12 22l-8.5-5V7z" fill="' + fill + '" stroke="' + stroke + '" stroke-width="1.5"' + dash + '/><path d="' + inner + '" fill="none" stroke="' + ink + '" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+}
+function mascotSvg(mood) {
+  const eyes = mood === "happy"
+    ? '<path d="M42 38q5-6 10 0M68 38q5-6 10 0" fill="none" stroke="var(--text)" stroke-width="2" stroke-linecap="round"/>'
+    : '<rect x="44" y="33" width="8" height="10" fill="var(--text)"/><rect x="68" y="33" width="8" height="10" fill="var(--text)"/>';
+  const mouth = mood === "happy" ? 'M48 54q12 10 24 0' : (mood === "think" ? 'M52 56h16' : 'M50 55q10 6 20 0');
+  return '<svg viewBox="0 0 120 124" aria-hidden="true" focusable="false">' +
+    '<rect x="24" y="78" width="72" height="42" fill="var(--surface)" stroke="var(--text)" stroke-width="2"/>' +
+    '<path d="M60 78l-8 10 8 6 8-6z" fill="var(--accent)" stroke="var(--text)" stroke-width="2"/>' +
+    '<rect x="26" y="12" width="68" height="60" fill="var(--surface)" stroke="var(--text)" stroke-width="2"/>' +
+    '<rect x="28" y="14" width="64" height="8" fill="var(--accent)"/>' +
+    eyes + '<path d="' + mouth + '" fill="none" stroke="var(--text)" stroke-width="2" stroke-linecap="round"/>' +
+    '<path d="M60 12V5" stroke="var(--text)" stroke-width="2"/><circle cx="60" cy="5" r="3" fill="var(--accent)" stroke="var(--text)" stroke-width="2"/></svg>';
+}
+function mrow(mood, text) {
+  return '<div class="mrow"><div class="mascot">' + mascotSvg(mood) + '</div><div class="speech"><span class="label">' + esc(CONFIG.mascot.name) + '</span><p>' + t(text) + '</p></div></div>';
+}
+
+/* ---- 画面の切りかえ ---- */
+function go(name, extra, focusSel) { view = Object.assign({ name: name }, extra || {}); window.scrollTo(0, 0); render(focusSel); }
+function render(focusSel) {
+  const fns = { top: vTop, map: vMap, quest: vQuest, result: vResult, cert: vCert, settings: vSettings, badges: vBadges, glossary: vGlossary, company: vCompany };
+  if (view.name === "quest" && !S) view = { name: "map" };
+  if (view.name === "cert" && !state.completedAt) view = { name: "map" };
+  $("main").innerHTML = fns[view.name]();
+  if (S) S.flash = false;
+  updateHud();
+  closeMenu();
+  const el = document.querySelector(focusSel || (view.name === "quest" ? "#qt" : "[data-h]"));
+  if (el) el.focus();
+}
+function updateHud() {
+  const xp = state.xp + (S ? S.xp : 0);
+  const li = levelInfo(xp);
+  $("hud-lv").textContent = pad(li.level);
+  $("hud-xp").textContent = li.into + " / " + li.need;
+  $("hud-rank").textContent = rankOf(li.level);
+  $("hud-fill").style.width = Math.min(100, li.into / li.need * 100) + "%";
+  const bar = $("hud-bar");
+  bar.setAttribute("aria-valuemax", li.need);
+  bar.setAttribute("aria-valuenow", li.into);
+  $("menu-cert").hidden = !state.completedAt;
+}
+function applyTheme() {
+  const r = document.documentElement;
+  if (state.theme === "light" || state.theme === "dark") r.setAttribute("data-theme", state.theme); else r.removeAttribute("data-theme");
+}
+function closeMenu() { $("menu").hidden = true; $("menubtn").setAttribute("aria-expanded", "false"); }
+function toggleMenu() {
+  const open = $("menu").hidden;
+  $("menu").hidden = !open;
+  $("menubtn").setAttribute("aria-expanded", open ? "true" : "false");
+}
+
+/* ---- 各画面 ---- */
+function vTop() {
+  const first = !state.nameAsked;
+  const li = levelInfo(state.xp);
+  const hasProg = Object.keys(state.progress).length > 0;
+  let h = '<section class="screen">';
+  h += '<p class="label">' + esc(CONFIG.appLabel) + ' / Sample</p>';
+  h += '<h1 class="title" data-h tabindex="-1">' + esc(CONFIG.appTitle) + '</h1>';
+  h += '<p class="sub">' + esc(CONFIG.companyName) + '<br>' + esc(CONFIG.appSubtitle) + '</p>';
+  h += mrow("happy", CONFIG.mascot.lines.welcome);
+  h += '<div class="info"><div><span class="label">Level</span><b>' + pad(li.level) + '</b></div><div><span class="label">Rank</span><b>' + esc(rankOf(li.level)) + '</b></div></div>';
+  h += '<div>';
+  if (first) h += '<label for="nick">呼び名(ニックネーム・任意)</label><input id="nick" class="inp" type="text" maxlength="20" autocomplete="nickname" placeholder="例:ゆうき">';
+  else h += '<p>' + esc(callName()) + '、おかえりなさい。</p>';
+  h += '<div class="actions"><button type="button" class="btn" data-act="start">' + (hasProg ? 'つづきから' : 'はじめる') + '</button></div></div>';
+  h += '<p class="note">' + esc(CONFIG.disclaimer) + '</p>';
+  h += '<p class="small">約10〜15分で、初日〜1週間に必要な基本を学べます。この教材は、見本です。</p>';
+  return h + '</section>';
+}
+function vMap() {
+  const ids = allIds();
+  let h = '<section class="screen"><p class="label">Quest Map</p><h1 data-h tabindex="-1">クエストマップ</h1>';
+  h += '<p>' + esc(callName()) + '、順番にクリアして、星を集めましょう。</p>';
+  h += '<ol class="map">';
+  ids.forEach((id, i) => {
+    const q = getQuest(id), p = state.progress[id], un = isUnlocked(id), boss = id === "boss";
+    const last = i === ids.length - 1;
+    let cls = "q-li";
+    if (!last && isUnlocked(ids[i + 1])) cls += " link-on";
+    if (!last && lastUnlocked === ids[i + 1]) cls += " link-new";
+    h += '<li class="' + cls + '">';
+    h += '<div class="nodeicon' + (un ? '' : ' lock') + (p ? ' done' : '') + '" aria-hidden="true">' + icon(un ? id : "lock") + '</div>';
+    h += '<button type="button" class="card node" data-act="quest" data-id="' + id + '"' + (un ? '' : ' aria-disabled="true"') + '>';
+    h += '<span class="label">' + (boss ? 'BOSS' : 'QUEST ' + pad(i + 1)) + '</span>';
+    h += '<span class="ntitle">' + esc(q.title) + '</span><span class="nsub">' + esc(q.subtitle || "") + '</span>';
+    if (!un) h += '<span class="nstat">ロック中:' + (boss ? '5つのクエストをすべてクリアすると開きます' : '前のクエストをクリアすると開きます') + '</span>';
+    else if (p) h += '<span class="nstat">' + starsHtml(p.stars) + '<span>クリア済み(全' + q.questions.length + '問)。もう一度、挑戦できます</span></span>';
+    else h += '<span class="nstat">挑戦できます(全' + q.questions.length + '問)</span>';
+    h += '</button></li>';
+  });
+  lastUnlocked = null;
+  h += '</ol>';
+  h += '<p class="small">クリア済みのクエストは、何度でも復習できます(復習では、XPは増えません)。</p>';
+  if (state.completedAt) h += '<div class="actions"><button type="button" class="btn" data-act="go" data-to="cert">修了証を見る</button></div>';
+  return h + '</section>';
+}
+function curQ() { return S.quest.questions[S.idx]; }
+function canCheck() { const q = curQ(); return q.type === "order" ? S.seq.length === q.options.length : S.sel !== null; }
+function judge(q) {
+  if (q.type === "order") return S.seq.length === q.answer.length && S.seq.every((v, i) => v === q.answer[i]);
+  return S.sel === q.answer;
+}
+function optHtml(value, text, selected, cls, mk, disabled, first) {
+  return '<label class="opt' + (selected ? ' sel' : '') + cls + '"><input type="radio" name="ans" value="' + value + '"' + (selected ? ' checked' : '') + (disabled ? ' disabled' : '') + (first ? ' data-first' : '') + '>' +
+    '<span class="body"><span class="otext">' + text + '</span>' + (mk ? '<span class="mk">' + mk + '</span>' : '') + '</span></label>';
+}
+function vQuest() {
+  const q = curQ(), total = S.quest.questions.length;
+  const done = S.phase !== "answering";
+  let h = '<section class="screen">';
+  h += '<p class="label">' + (S.isBoss ? 'BOSS' : 'QUEST ' + pad(S.no)) + ' / Q ' + (S.idx + 1) + ' of ' + total + '</p>';
+  h += '<h1>' + esc(S.quest.title) + '</h1>';
+  h += '<div class="segs" aria-hidden="true">';
+  for (let i = 0; i < total; i++) h += '<span class="' + (i < S.idx ? 'd' : (i === S.idx ? 'c' : '')) + '"></span>';
+  h += '</div>';
+  if (S.practice) h += '<p class="note">復習モードです。XPは増えません。</p>';
+  h += '<div class="card' + (S.flash ? ' flash' : '') + '"><p class="qtext" id="qt" tabindex="-1">' + t(q.text) + '</p>';
+  if (q.terms) q.terms.forEach(k => {
+    const g = CONFIG.glossary.find(x => x.term === k);
+    if (g) h += '<p class="terms"><b>' + esc(g.term) + '</b>:' + esc(g.meaning) + '</p>';
+  });
+  if (q.note) h += '<p class="terms">' + t(q.note) + '</p>';
+  if (q.ruleKeys) {
+    h += '<div class="rulebox"><p class="label">Rule / 例</p><p style="margin:.2em 0"><b>' + esc(CONFIG.companyName) + 'のルール(例)</b></p><ul>';
+    q.ruleKeys.forEach(k => { h += '<li>' + esc(CONFIG.ruleLabels[k] || k) + ':' + esc(CONFIG.rules[k] || "") + '</li>'; });
+    h += '</ul><p class="small">' + esc(CONFIG.disclaimer) + '</p></div>';
+  }
+  h += '</div>';
+  const OK = '◎ 正解', NG = '▲ 不正解';
+  if (q.type === "choice") {
+    h += '<p class="hint">いちばん良いものを、1つ選びましょう。</p><div class="opts" role="radiogroup" aria-labelledby="qt">';
+    q.options.forEach((o, i) => {
+      const sel = S.sel === i; let cls = '', mk = '';
+      if (S.phase === "right" && sel) { cls = ' ok'; mk = OK; }
+      else if (S.phase === "wrong" && sel) { cls = ' ng'; mk = NG; }
+      else if (S.phase === "revealed") { if (i === q.answer) { cls = ' ok'; mk = OK; } else if (sel) { cls = ' ng'; mk = NG; } }
+      h += optHtml(i, t(o), sel, cls, mk, done, i === 0);
+    });
+    h += '</div>';
+  } else if (q.type === "truefalse") {
+    h += '<p class="hint">正しいと思ったら「正しい」、ちがうと思ったら「ちがう」を選びましょう。</p><div class="opts tf" role="radiogroup" aria-labelledby="qt">';
+    [[true, "○ 正しい"], [false, "× ちがう"]].forEach((o, i) => {
+      const sel = S.sel === o[0]; let cls = '', mk = '';
+      if (S.phase === "right" && sel) { cls = ' ok'; mk = OK; }
+      else if (S.phase === "wrong" && sel) { cls = ' ng'; mk = NG; }
+      else if (S.phase === "revealed") { if (o[0] === q.answer) { cls = ' ok'; mk = OK; } else if (sel) { cls = ' ng'; mk = NG; } }
+      h += optHtml(String(o[0]), esc(o[1]), sel, cls, mk, done, i === 0);
+    });
+    h += '</div>';
+  } else {
+    h += '<p class="hint">手順を、正しい順番に、タップして選びましょう。もう一度タップすると、選びなおせます。</p><ol class="steps">';
+    q.options.forEach((o, i) => {
+      const pos = S.seq.indexOf(i);
+      h += '<li><button type="button" class="step' + (pos >= 0 ? ' on' : '') + '" data-act="step" data-i="' + i + '" aria-pressed="' + (pos >= 0) + '"' + (done ? ' disabled' : '') + (i === 0 ? ' data-first' : '') + '>' +
+        '<span class="num" aria-hidden="true">' + (pos >= 0 ? pos + 1 : '') + '</span><span class="otext">' + t(o) + '</span><span class="sr pos">' + (pos >= 0 ? '(選んだ順番:' + (pos + 1) + '番目)' : '') + '</span></button></li>';
+    });
+    h += '</ol><p class="small" id="seqcount" aria-live="polite">選んだ数:' + S.seq.length + ' / ' + q.options.length + '</p>';
+    if (!done) h += '<button type="button" class="btn line" data-act="order-clear">選びなおす</button>';
+  }
+  if (!done) h += '<div class="actions"><button type="button" class="btn" id="chk" data-act="check"' + (canCheck() ? '' : ' disabled') + '>答える</button></div>';
+  else h += fbHtml(q, total);
+  return h + '</section>';
+}
+function fbHtml(q, total) {
+  const L = S.last || {};
+  const ph = S.phase;
+  let h = '<div class="fb' + (ph === "wrong" ? ' bad' : '') + '" id="fb" tabindex="-1" role="status">';
+  if (ph === "right") {
+    h += '<p class="fb-title">◎ 正解です</p>';
+    if (S.practice) h += '<p class="fb-xp">復習モード:XPは増えません</p>';
+    else {
+      let x = '+' + L.gain + ' XP';
+      if (L.retry) x += '(やり直しの正解なので、XPは半分です)';
+      h += '<p class="fb-xp">' + x + (L.bonus ? '<span class="combo">COMBO ×' + S.streak + ' +' + L.bonus + ' XP</span>' : '') + '</p>';
+    }
+    h += mrow("happy", L.bonus ? line("combo") : line("correct"));
+  } else if (ph === "wrong") {
+    h += '<p class="fb-title">▲ おしい!もう少しです</p>' + mrow("think", line("retry"));
+  } else {
+    h += '<p class="fb-title">正しい答えを見ましょう</p>' + mrow("think", "だいじょうぶ。次に活かせば、それで十分です。");
+  }
+  h += '<p class="fb-exp"><span class="label">Why</span><br>' + t(q.explanation) + '</p>';
+  if (q.type === "order" && ph !== "wrong") {
+    h += '<p class="label">正しい順番</p><ol class="answerlist">';
+    q.answer.forEach(i => { h += '<li>' + t(q.options[i]) + '</li>'; });
+    h += '</ol>';
+  }
+  h += '<div class="actions">';
+  if (ph === "wrong") {
+    h += '<button type="button" class="btn" data-act="retry">もう一度、やってみる</button>';
+    if (S.attempts >= 2) h += '<button type="button" class="btn line" data-act="reveal">答えを見る</button>';
+  } else {
+    h += '<button type="button" class="btn" data-act="next">' + (S.idx + 1 < total ? 'つぎの問題へ' : 'クエストを終える') + '</button>';
+  }
+  return h + '</div></div>';
+}
+function vResult() {
+  const q = getQuest(R.id), boss = R.id === "boss";
+  let h = '<section class="screen"><p class="label">' + (boss ? 'Boss Clear' : 'Quest Clear') + '</p>';
+  h += '<h1 data-h tabindex="-1">' + (boss ? 'ボスクエスト、クリア' : 'クエスト、クリア') + '</h1>';
+  h += '<div class="card"><p style="margin:0"><b>' + esc(q.title) + '</b></p>';
+  h += '<p style="margin:.4em 0">' + starsHtml(R.stars) + '</p>';
+  h += '<p class="small" style="margin:.2em 0">まちがえた回数:' + R.mistakes + '回</p>';
+  if (R.practice) h += '<p class="fb-xp">復習モードのため、XPは増えません。</p>';
+  else h += '<p class="big">+' + R.earned + ' XP</p><p class="small" style="margin:0">クリアのボーナス +' + R.bonus + ' XP を含みます</p>';
+  if (R.levelAfter > R.levelBefore) h += '<p class="fb-xp">LEVEL UP!  LV ' + pad(R.levelBefore) + ' → LV ' + pad(R.levelAfter) + '</p>';
+  if (R.rankAfter !== R.rankBefore) h += '<p class="fb-xp">RANK UP!  ' + esc(R.rankBefore) + ' → ' + esc(R.rankAfter) + '</p>';
+  h += '</div>';
+  if (R.newBadges.length) {
+    h += '<div class="card sect"><p class="label">New Badge</p><ul class="rlist">';
+    R.newBadges.forEach(id => { const b = CONFIG.badges.find(x => x.id === id); if (b) h += '<li>' + badgeSvg(id, true) + '<span><b>' + esc(b.name) + '</b><br><span class="small">' + esc(b.condition) + '</span></span></li>'; });
+    h += '</ul></div>';
+  }
+  h += mrow("happy", boss ? CONFIG.mascot.lines.done : CONFIG.mascot.lines.clear);
+  h += '<div class="actions">';
+  if (boss && state.completedAt) h += '<button type="button" class="btn" data-act="go" data-to="cert">修了証を見る</button>';
+  else if (R.nextId) h += '<button type="button" class="btn" data-act="quest" data-id="' + R.nextId + '">' + (R.nextId === "boss" ? 'ボスクエストへ' : 'つぎのクエストへ') + '</button>';
+  h += '<button type="button" class="btn line" data-act="go" data-to="map">マップに戻る</button>';
+  h += '<button type="button" class="btn line" data-act="quest" data-id="' + R.id + '">もう一度、挑戦する</button>';
+  return h + '</div></section>';
+}
+function vCert() {
+  const li = levelInfo(state.xp);
+  let h = '<section class="screen"><p class="label">Certificate / Sample</p>';
+  h += '<h1 data-h tabindex="-1">初日クエスト 修了証</h1>';
+  h += '<div class="card cert-card"><p class="cert-co">' + esc(CONFIG.companyName) + '</p>';
+  h += '<p class="cert-name">' + esc(callName()) + '</p>';
+  h += '<p>「' + esc(CONFIG.appTitle) + '」の、すべてのクエストを修了しました。</p>';
+  h += '<dl class="cert-meta"><div><dt>修了日</dt><dd>' + esc(fmtDate(state.completedAt)) + '</dd></div>';
+  h += '<div><dt>LEVEL</dt><dd>LV ' + pad(li.level) + '</dd></div>';
+  h += '<div><dt>RANK</dt><dd>' + esc(rankOf(li.level)) + '</dd></div>';
+  h += '<div><dt>XP</dt><dd>' + state.xp + '</dd></div></dl>';
+  h += '<p class="label">Badges</p><ul class="cert-badges">';
+  CONFIG.badges.forEach(b => { if (state.badges.indexOf(b.id) >= 0) h += '<li>' + badgeSvg(b.id, true) + '<span>' + esc(b.name) + '</span></li>'; });
+  h += '</ul><p class="small">この教材は見本です。' + esc(CONFIG.disclaimer) + '</p></div>';
+  h += '<p class="small no-print">印刷するか、画面のスクリーンショットで、会社に提出できます。</p>';
+  h += '<div class="actions no-print"><button type="button" class="btn" data-act="print">印刷する</button><button type="button" class="btn line" data-act="go" data-to="map">マップに戻る</button></div>';
+  return h + '</section>';
+}
+function vBadges() {
+  let h = '<section class="screen"><p class="label">Badges</p><h1 data-h tabindex="-1">バッジ一覧</h1>';
+  h += '<p class="small">獲得した数:' + state.badges.length + ' / ' + CONFIG.badges.length + '</p><ul class="bgrid">';
+  CONFIG.badges.forEach(b => {
+    const e = state.badges.indexOf(b.id) >= 0;
+    h += '<li class="card bitem' + (e ? '' : ' no') + '">' + badgeSvg(b.id, e) + '<span><span class="st">' + (e ? '獲得ずみ' : '未獲得') + '</span><b>' + esc(b.name) + '</b><span class="small">' + esc(b.condition) + '</span></span></li>';
+  });
+  return h + '</ul></section>';
+}
+function vGlossary() {
+  let h = '<section class="screen"><p class="label">Glossary</p><h1 data-h tabindex="-1">用語の説明</h1><dl class="gl">';
+  CONFIG.glossary.forEach(g => { h += '<div class="card"><dt>' + esc(g.term) + '</dt><dd>' + esc(g.meaning) + '</dd></div>'; });
+  return h + '</dl></section>';
+}
+function vCompany() {
+  const c = CONFIG.companyPage;
+  let h = '<section class="screen"><p class="label">For Your Company / Sample</p><h1 data-h tabindex="-1">' + esc(c.title) + '</h1>';
+  h += '<p class="note"><b>この教材は見本です。</b><br>' + esc(c.lead) + '</p>';
+  c.items.forEach((it, i) => { h += '<div class="card citem"><span class="cno">' + pad(i + 1) + '</span><div><h2>' + esc(it.title) + '</h2><p style="margin:0">' + esc(it.body) + '</p></div></div>'; });
+  h += '<div class="actions"><button type="button" class="btn line" data-act="go" data-to="settings">設定に戻る</button></div>';
+  return h + '</section>';
+}
+function vSettings() {
+  let h = '<section class="screen"><p class="label">Settings</p><h1 data-h tabindex="-1">設定</h1>';
+  h += '<div class="card sect"><h2>呼び名</h2><div><label for="nm" class="small">修了証に出る名前です(任意)</label>';
+  h += '<input id="nm" class="inp" type="text" maxlength="20" autocomplete="nickname" value="' + esc(state.name) + '">';
+  h += '<div class="actions"><button type="button" class="btn line" data-act="save-name">保存する</button></div><p class="msg" id="msg-name" role="status" aria-live="polite"></p></div></div>';
+  h += '<div class="card sect"><h2>表示の色</h2><div class="opts" role="radiogroup" aria-label="表示の色">';
+  [["auto", "端末の設定に合わせる"], ["light", "ライト"], ["dark", "ダーク"]].forEach(o => {
+    const s = state.theme === o[0];
+    h += '<label class="opt' + (s ? ' sel' : '') + '"><input type="radio" name="theme" value="' + o[0] + '"' + (s ? ' checked' : '') + '><span class="body"><span class="otext">' + o[1] + '</span></span></label>';
+  });
+  h += '</div></div>';
+  h += '<div class="card sect"><h2>記録のバックアップ</h2><p>ブラウザのデータが消えると、記録も消えます。ときどき「書き出す」で、記録のファイルを保管しておくと安心です。</p>';
+  h += '<div class="actions"><button type="button" class="btn line" data-act="export">記録を書き出す</button><button type="button" class="btn line" data-act="import">記録を読み込む</button></div>';
+  h += '<input type="file" id="imp" class="sr" accept=".json,application/json" tabindex="-1" aria-hidden="true">';
+  h += '<p class="msg" id="msg-bak" role="status" aria-live="polite">' + (view.msg ? esc(view.msg) : '') + '</p></div>';
+  h += '<div class="card sect' + (view.confirmReset ? ' warn' : '') + '"><h2>記録を消す</h2>';
+  if (view.confirmReset) {
+    h += '<p><b>注意:</b>本当に、すべての記録を消しますか?消した記録は、元にもどせません。書き出したファイルがあれば、あとで読み込めます。</p>';
+    h += '<div class="actions"><button type="button" class="btn line" data-act="reset-cancel" data-first>やめる</button><button type="button" class="btn" data-act="reset-do">消す</button></div>';
+  } else {
+    h += '<p>進み具合、得点、バッジ、呼び名を、すべて消します。</p><div class="actions"><button type="button" class="btn line" data-act="reset-ask">記録を消す</button></div>';
+  }
+  h += '</div>';
+  h += '<div class="card sect"><h2>この教材について</h2><p>この教材は見本です。インターネットにつながなくても動きます。アクセス解析や広告はなく、記録は、このブラウザの中にだけ保存されます。</p>';
+  h += '<div class="actions"><button type="button" class="btn line" data-act="go" data-to="company">貴社版では、ここが変わります</button></div></div>';
+  return h + '</section>';
+}
+
+/* ---- クエストの進行 ---- */
+function startQuest(id) {
+  if (!isUnlocked(id)) return;
+  const quest = getQuest(id);
+  S = { id: id, quest: quest, no: allIds().indexOf(id) + 1, isBoss: id === "boss", idx: 0, mistakes: 0, streak: 0, maxStreak: 0, xp: 0,
+    practice: cleared(id), phase: "answering", attempts: 0, sel: null, seq: [], last: null, flash: false };
+  go("quest");
+}
+function checkAnswer() {
+  if (!S || S.phase !== "answering" || !canCheck()) return;
+  const q = curQ();
+  S.attempts++;
+  if (judge(q)) {
+    let gain = 0, bonus = 0, retry = S.attempts > 1;
+    if (!retry) { S.streak++; S.maxStreak = Math.max(S.maxStreak, S.streak); }
+    if (!S.practice) {
+      if (!retry) { gain = CONFIG.xp.correct; if (S.streak >= 2) bonus = Math.min(CONFIG.xp.comboStep * (S.streak - 1), CONFIG.xp.comboMax); }
+      else gain = Math.round(CONFIG.xp.correct * CONFIG.xp.retryRate);
+    }
+    S.xp += gain + bonus;
+    S.last = { gain: gain + bonus, bonus: bonus, retry: retry };
+    S.phase = "right"; S.flash = true;
+  } else {
+    S.mistakes++; S.streak = 0; S.phase = "wrong"; S.last = {};
+  }
+  render("#fb");
+}
+function nextQuestion() {
+  if (S.idx + 1 < S.quest.questions.length) {
+    S.idx++; S.phase = "answering"; S.attempts = 0; S.sel = null; S.seq = []; S.last = null;
+    render();
+  } else finishQuest();
+}
+function evalBadges() {
+  const qids = CONFIG.quests.map(q => q.id);
+  const cond = {
+    first: () => cleared("q1"),
+    contact: () => cleared("q2") && cleared("q3"),
+    streak3: () => state.bestStreak >= 3,
+    nomiss: () => state.anyPerfect,
+    allstars: () => qids.every(id => state.progress[id] && state.progress[id].stars === 3),
+    complete: () => cleared("boss")
+  };
+  CONFIG.badges.forEach(b => { if (cond[b.id] && cond[b.id]() && state.badges.indexOf(b.id) < 0) state.badges.push(b.id); });
+}
+function finishQuest() {
+  const id = S.id, ids = allIds(), i = ids.indexOf(id);
+  const nextId = i + 1 < ids.length ? ids[i + 1] : null;
+  const nextWas = nextId ? isUnlocked(nextId) : false;
+  const before = levelInfo(state.xp).level;
+  const mistakes = S.mistakes;
+  const stars = mistakes <= CONFIG.starRule.three ? 3 : (mistakes <= CONFIG.starRule.two ? 2 : 1);
+  const prev = state.progress[id];
+  const bonus = S.practice ? 0 : (id === "boss" ? CONFIG.xp.bossClear : CONFIG.xp.questClear);
+  const earned = S.xp + bonus;
+  state.xp += earned;
+  state.progress[id] = { cleared: true, stars: Math.max(stars, prev ? prev.stars : 0), perfect: !!(prev && prev.perfect) || mistakes === 0 };
+  if (mistakes === 0) state.anyPerfect = true;
+  state.bestStreak = Math.max(state.bestStreak, S.maxStreak);
+  if (id === "boss" && !state.completedAt) state.completedAt = new Date().toISOString();
+  const had = state.badges.slice();
+  evalBadges();
+  const nb = state.badges.filter(b => had.indexOf(b) < 0);
+  const after = levelInfo(state.xp).level;
+  if (nextId && !nextWas && isUnlocked(nextId)) lastUnlocked = nextId;
+  R = { id: id, stars: stars, mistakes: mistakes, earned: earned, bonus: bonus, practice: S.practice, newBadges: nb,
+    levelBefore: before, levelAfter: after, rankBefore: rankOf(before), rankAfter: rankOf(after),
+    nextId: nextId && isUnlocked(nextId) ? nextId : null };
+  S = null;
+  Store.save();
+  go("result");
+}
+function refreshOrder() {
+  const q = curQ();
+  document.querySelectorAll(".step").forEach(b => {
+    const p = S.seq.indexOf(+b.dataset.i);
+    b.classList.toggle("on", p >= 0);
+    b.setAttribute("aria-pressed", p >= 0 ? "true" : "false");
+    b.querySelector(".num").textContent = p >= 0 ? String(p + 1) : "";
+    b.querySelector(".pos").textContent = p >= 0 ? "(選んだ順番:" + (p + 1) + "番目)" : "";
+  });
+  const c = $("seqcount");
+  if (c) c.textContent = "選んだ数:" + S.seq.length + " / " + q.options.length;
+  updateCheck();
+}
+function updateCheck() { const b = $("chk"); if (b) b.disabled = !canCheck(); }
+function syncRadios(name) {
+  document.querySelectorAll('input[name="' + name + '"]').forEach(inp => { const o = inp.closest(".opt"); if (o) o.classList.toggle("sel", inp.checked); });
+}
+
+/* ---- 書き出し・読み込み ---- */
+function exportRecord() {
+  try {
+    const payload = { app: APPID, version: 1, exportedAt: new Date().toISOString(), state: state };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "first-day-quest-record.json";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    setMsg("msg-bak", "記録を書き出しました。ファイルは、ダウンロードの保存先に入ります。");
+  } catch (e) { setMsg("msg-bak", "書き出せませんでした。このブラウザでは、ファイルの保存ができないようです。"); }
+}
+function importRecord(file) {
+  if (!file) return;
+  const bad = "このファイルは読み込めません。この教材で書き出した、記録のファイルを選んでください。";
+  if (file.size > 1000000) { setMsg("msg-bak", bad); return; }
+  const fr = new FileReader();
+  fr.onload = () => {
+    try {
+      const o = JSON.parse(fr.result);
+      if (!o || o.app !== APPID || !o.state) throw new Error("x");
+      const s = sanitize(o.state);
+      if (!s) throw new Error("x");
+      state = s; Store.save(); applyTheme();
+      go("settings", { msg: "記録を読み込みました。" });
+    } catch (e) { setMsg("msg-bak", bad); }
+  };
+  fr.onerror = () => setMsg("msg-bak", bad);
+  fr.readAsText(file);
+}
+function setMsg(id, text) { const el = $(id); if (el) el.textContent = text; }
+
+/* ---- 操作(イベント) ---- */
+document.addEventListener("click", e => {
+  const el = e.target.closest("[data-act]");
+  if (!el) {
+    if (!$("menu").hidden && !e.target.closest("#menu")) closeMenu();
+    return;
+  }
+  const act = el.dataset.act;
+  if (act !== "toggle-menu" && !$("menu").hidden && !el.closest("#menu")) closeMenu();
+  switch (act) {
+    case "toggle-menu": toggleMenu(); break;
+    case "go": S = null; go(el.dataset.to); break;
+    case "quest": if (el.getAttribute("aria-disabled") === "true") return; startQuest(el.dataset.id); break;
+    case "check": checkAnswer(); break;
+    case "retry": S.phase = "answering"; S.sel = null; S.seq = []; S.last = null; render("[data-first]"); break;
+    case "reveal": S.phase = "revealed"; S.last = {}; render("#fb"); break;
+    case "next": nextQuestion(); break;
+    case "step": { if (!S || S.phase !== "answering") return; const i = +el.dataset.i, k = S.seq.indexOf(i); if (k >= 0) S.seq.splice(k, 1); else S.seq.push(i); refreshOrder(); break; }
+    case "order-clear": S.seq = []; refreshOrder(); break;
+    case "export": exportRecord(); break;
+    case "import": { const f = $("imp"); if (f) f.click(); break; }
+    case "reset-ask": go("settings", { confirmReset: true }, "[data-first]"); break;
+    case "reset-cancel": go("settings"); break;
+    case "reset-do":
+      Store.clear(); state = DEFAULT(); S = null; R = null; applyTheme(); Store.save(); go("top"); break;
+    case "start": startGame(); break;
+    case "save-name": saveName(); break;
+    case "print": window.print(); break;
+  }
+});
+document.addEventListener("change", e => {
+  const el = e.target;
+  if (el.matches('input[name="ans"]') && S) {
+    S.sel = curQ().type === "truefalse" ? el.value === "true" : +el.value;
+    syncRadios("ans"); updateCheck();
+  } else if (el.matches('input[name="theme"]')) {
+    state.theme = el.value; applyTheme(); Store.save(); syncRadios("theme");
+  } else if (el.id === "imp") {
+    importRecord(el.files && el.files[0]); el.value = "";
+  }
+});
+function startGame() {
+  const inp = $("nick");
+  if (inp) state.name = String(inp.value || "").trim().slice(0, 20);
+  state.nameAsked = true; Store.save(); go("map");
+}
+function saveName() {
+  const inp = $("nm");
+  state.name = String(inp ? inp.value : "").trim().slice(0, 20); state.nameAsked = true;
+  Store.save(); setMsg("msg-name", "保存しました。");
+}
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && !$("menu").hidden) { closeMenu(); $("menubtn").focus(); }
+  if (e.key === "Enter" && e.target && e.target.id === "nick") { e.preventDefault(); startGame(); }
+  if (e.key === "Enter" && e.target && e.target.id === "nm") { e.preventDefault(); saveName(); }
+});
+
+/* ---- 起動 ---- */
+Store.init();
+const loaded = sanitize(Store.load());
+if (loaded) state = loaded;
+applyTheme();
+if (!Store.ok) showStorageNotice();
+render();
+</script>
+</body>
+</html>
